@@ -1,18 +1,72 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <div class="banner">
+      <div class="container">
+        <h1>NewWorld</h1>
+        <p>A place to share your knowledge.</p>
+      </div>
+    </div>
+    <div class="container page">
+      <div class="row">
+        <div class="col-md-9">
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="收藏" name="feed" disabled></el-tab-pane>
+            <el-tab-pane label="首页" name="index"></el-tab-pane>
+          </el-tabs>
+          <article-list></article-list>
+        </div>
+        <!-- Sidebar where popular tags are listed -->
+        <div class="col-md-3">
+          <tag-list></tag-list>
+        </div>
+        <!-- End the row & container divs -->
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import ArticleList from '@/components/home/ArticleList'
+import TagList from '@/components/home/TagList'
 export default {
   name: 'home',
+  data () {
+    return {
+      activeName: 'index'
+    }
+  },
+  methods: {
+    handleClick (tab, event) {
+      console.log(tab, event)
+    }
+  },
   components: {
-    HelloWorld
+    ArticleList,
+    TagList
   }
 }
 </script>
+
+<style lang="less" scoped>
+.banner {
+  background-color: #5cb85c;
+  box-shadow: inset 0 8px 8px -8px rgba(0, 0, 0, 0.3),
+    inset 0 -8px 8px -8px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  padding: 30px;
+  margin-bottom: 40px;
+  .container {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    h1 {
+      font-weight: 700;
+    }
+    p {
+      font-size: 20px;
+    }
+  }
+}
+</style>
