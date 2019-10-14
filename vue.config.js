@@ -4,5 +4,8 @@ module.exports = {
       preProcessor: 'less',
       patterns: []
     }
+  },
+  devServer: {
+    port: 9000
   }
 }

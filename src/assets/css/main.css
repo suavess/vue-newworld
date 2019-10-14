@@ -1,6 +1,16 @@
-.el-tabs__active-bar{
-  background-color: #5cb85c!important;
+.row{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-.is-active{
-  color: #5cb85c!important;
+.page{
+  min-height: 78vh;
+}
+.text-xs-center{
+  text-align: center;
+}
+@media (min-width: 768px){
+  .offset-md-3{
+    margin-left: 25%;
+  }
 }

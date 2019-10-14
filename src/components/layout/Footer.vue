@@ -24,7 +24,7 @@ footer {
   width: 100%;
   .container {
     a {
-      color: #5cb85c;
+      color: #409EFF;
     }
     span{
       color: #bbb;

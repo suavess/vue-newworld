@@ -14,7 +14,26 @@
           <a class="author" href="">KhoaTest</a>
           <span class="date">September 9, 2019</span>
         </div>
-        <el-button type="success" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
+        <el-button type="primary" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
+      </div>
+      <router-link to="/article/1" class="preview-link">
+        <h1>Troi hom nay mua nhieu</h1>
+        <p>hay rat nang</p>
+        <span>查看更多...</span>
+        <ul class="tag-list">
+        </ul>
+      </router-link>
+    </div>
+    <div class="article-preview">
+      <div class="article-meta">
+        <a href="#">
+          <img src="https://static.productionready.io/images/smiley-cyrus.jpg" alt="">
+        </a>
+        <div class="info">
+          <a class="author" href="">KhoaTest</a>
+          <span class="date">September 9, 2019</span>
+        </div>
+        <el-button type="primary" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
       </div>
       <a class="preview-link">
         <h1>Troi hom nay mua nhieu</h1>
@@ -33,26 +52,7 @@
           <a class="author" href="">KhoaTest</a>
           <span class="date">September 9, 2019</span>
         </div>
-        <el-button type="success" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
-      </div>
-      <a class="preview-link">
-        <h1>Troi hom nay mua nhieu</h1>
-        <p>hay rat nang</p>
-        <span>查看更多...</span>
-        <ul class="tag-list">
-        </ul>
-      </a>
-    </div>
-    <div class="article-preview">
-      <div class="article-meta">
-        <a href="#">
-          <img src="https://static.productionready.io/images/smiley-cyrus.jpg" alt="">
-        </a>
-        <div class="info">
-          <a class="author" href="">KhoaTest</a>
-          <span class="date">September 9, 2019</span>
-        </div>
-        <el-button type="success" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
+        <el-button type="primary" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
       </div>
       <a class="preview-link">
         <h1>Troi hom nay mua nhieu</h1>
@@ -99,7 +99,7 @@ export default {
       vertical-align: middle;
       line-height: 16px;
       .author{
-        color: #5cb85c;
+        color: #409EFF;
         text-decoration: none;
         font-size: 14px;
       }

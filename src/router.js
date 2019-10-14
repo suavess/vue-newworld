@@ -26,6 +26,26 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: () => import('@/views/Register')
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('@/views/Settings')
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/Profile')
+    },
+    {
+      path: '/editor',
+      name: 'editor',
+      component: () => import('@/views/Editor')
+    },
+    {
+      path: '/article/:id',
+      name: 'article',
+      component: () => import('@/views/Article')
     }
   ]
 })
