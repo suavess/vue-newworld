@@ -10,7 +10,7 @@
             <span>October 2, 2019</span>
           </div>
           <el-button type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px">关注Suave</el-button>
-          <el-button type="success" plain size="mini" icon="el-icon-star-off">收藏文章(1)</el-button>
+          <el-button type="primary" plain size="mini" icon="el-icon-star-off">收藏文章(1)</el-button>
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@
             <span>October 2, 2019</span>
         </div>
         <el-button type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px">关注Suave</el-button>
-        <el-button type="success" plain size="mini" icon="el-icon-star-off">收藏文章(1)</el-button>
+        <el-button type="primary" plain size="mini" icon="el-icon-star-off">收藏文章(1)</el-button>
       </div>
       <comment></comment>
     </div>
@@ -85,12 +85,14 @@ export default {
 .body{
   margin: 0 auto;
   width: 75%;
+  max-width: 1140px;
   margin-bottom: 70px;
 }
 .footer{
   border-top: #cccccc 1px solid;
   padding-top: 30px;
   width: 75%;
+  max-width: 1140px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
