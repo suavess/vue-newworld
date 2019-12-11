@@ -10,7 +10,7 @@
           <li>
             <router-link to="/home">主页</router-link>
           </li>
-          <li>
+          <li v-if="hasLogin">
             <router-link to="/editor">
               <i class="el-icon-plus"></i>
               发布文章
@@ -19,13 +19,13 @@
           <li>
             <router-link to="/settings"><i class="el-icon-setting"></i>设置</router-link>
           </li>
-          <li>
-            <router-link to="/profile">Suave</router-link>
+          <li v-if="hasLogin">
+            <router-link to="/profile">{{ name }}</router-link>
           </li>
-          <li>
+          <li v-if="!hasLogin">
             <router-link to="/login">登录</router-link>
           </li>
-          <li>
+          <li v-if="!hasLogin">
             <router-link to="/register">注册</router-link>
           </li>
         </ul>
@@ -37,7 +37,23 @@
 </template>
 
 <script>
-export default {}
+import { getToken } from '@/utils/auth'
+import store from '@/store'
+export default {
+  name: 'Header',
+  data () {
+    return {
+      hasLogin: false,
+      name: ''
+    }
+  },
+  created () {
+    if (getToken()) {
+      this.hasLogin = true
+      this.name = store.getters.name
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

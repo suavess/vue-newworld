@@ -1,4 +1,4 @@
-import { getInfo } from '@/api/user'
+import { info, login, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const state = {
@@ -21,24 +21,27 @@ const mutations = {
 
 const actions = {
   // user login
-  login ({ commit }, data) {
-    const { roles, token } = data
+  login ({ commit }, user) {
     return new Promise((resolve, reject) => {
-      // commit('SET_ROLES', data.roles)
-      commit('SET_TOKEN', token)
-      setToken(token)
-      resolve(roles)
+      login(user).then(response => {
+        const { data } = response
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
+        resolve()
+      }).catch(e => {
+        reject(e)
+      })
     })
   },
 
   // get user info
   getInfo ({ commit }) {
     return new Promise((resolve, reject) => {
-      getInfo().then(response => {
+      info().then(response => {
         const { data } = response
         commit('SET_NAME', data.name)
         commit('SET_EMAIL', data.email)
-        resolve(data)
+        resolve()
       }).catch(error => {
         reject(error)
       })
@@ -47,18 +50,17 @@ const actions = {
 
   // user logout
   logout ({ commit }) {
-    commit('SET_TOKEN', '')
-    commit('SET_NAME', '')
-    commit('SET_EMAIL', '')
-    removeToken()
-  },
-
-  // remove token
-  resetToken ({ commit }) {
-    commit('SET_TOKEN', '')
-    commit('SET_NAME', '')
-    commit('SET_EMAIL', '')
-    removeToken()
+    return new Promise((resolve, reject) => {
+      logout().then(() => {
+        commit('SET_TOKEN', '')
+        commit('SET_NAME', '')
+        commit('SET_EMAIL', '')
+        removeToken()
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
   }
 }
 
