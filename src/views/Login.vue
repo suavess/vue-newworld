@@ -4,18 +4,18 @@
       <div class="col-md-6 col-xs-12">
         <h1 class="text-xs-center ng-binding">登录</h1>
         <p class="text-xs-center">
-          <a>需要注册？</a>
+          <router-link to="/register">需要注册？</router-link>
         </p>
         <div style="margin: 20px;"></div>
         <el-form label-position="right" label-width="80px" :model="user" :rules="rules" ref="user">
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="user.email"></el-input>
+            <el-input v-model.trim="user.email"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="user.password"></el-input>
+            <el-input type="password" v-model.trim="user.password" @keyup.enter="handleLogin"></el-input>
           </el-form-item>
         </el-form>
-        <el-button type="primary" class="btn-submit">登录</el-button>
+        <el-button type="primary" class="btn-submit" @click="handleLogin">登录</el-button>
       </div>
     </div>
   </div>
@@ -23,10 +23,11 @@
 
 <script>
 export default {
+  name: 'Login',
   data () {
     return {
       user: {
-        email: '',
+        email: '1132888093@qq.com',
         password: ''
       },
       rules: {
@@ -35,9 +36,17 @@ export default {
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
         password: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       }
+    }
+  },
+  methods: {
+    handleLogin () {
+      this.$store.dispatch('user/userLogin', this.user).then(() => {
+        this.$router.push('/home')
+        this.$message.success('登录成功！')
+      })
     }
   }
 }

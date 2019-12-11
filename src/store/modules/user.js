@@ -21,7 +21,7 @@ const mutations = {
 
 const actions = {
   // user login
-  login ({ commit }, user) {
+  userLogin ({ commit }, user) {
     return new Promise((resolve, reject) => {
       login(user).then(response => {
         const { data } = response
@@ -39,7 +39,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       info().then(response => {
         const { data } = response
-        commit('SET_NAME', data.name)
+        commit('SET_NAME', data.username)
         commit('SET_EMAIL', data.email)
         resolve()
       }).catch(error => {

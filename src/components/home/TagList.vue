@@ -2,26 +2,7 @@
   <div class="sidebar">
     <p>热门标签</p>
     <div class="tag-list">
-      <a class="tag">butt</a>
-      <a class="tag">dragons</a>
-      <a class="tag">test</a>
-      <a class="tag">training</a>
-      <a class="tag">tags</a>
-      <a class="tag">as</a>
-      <a class="tag">coffee</a>
-      <a class="tag">animation</a>
-      <a class="tag">flowers</a>
-      <a class="tag">cars</a>
-      <a class="tag">baby</a>
-      <a class="tag">money</a>
-      <a class="tag">caramel</a>
-      <a class="tag">happiness</a>
-      <a class="tag">japan</a>
-      <a class="tag">clean</a>
-      <a class="tag">sugar</a>
-      <a class="tag">sushi</a>
-      <a class="tag">cookies</a>
-      <a class="tag">well</a>
+      <a class="tag" v-for="tag in tagsList" :key="tag.id">{{tag.name}}</a>
     </div>
     <!-- <div>正在加载热门标签。。。</div>
     <div>暂时没有热门标签。。。</div> -->
@@ -29,8 +10,24 @@
 </template>
 
 <script>
+import { list } from '@/api/tags'
 export default {
-
+  data () {
+    return {
+      tagsList: []
+    }
+  },
+  created () {
+    this.getTags()
+  },
+  methods: {
+    getTags () {
+      list().then(response => {
+        const { data } = response
+        this.tagsList = data
+      })
+    }
+  }
 }
 </script>
 

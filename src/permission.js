@@ -1,11 +1,10 @@
 import router from './router'
-import store from './store'
+import store from '@/store'
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth' // get token from cookie
 
 router.beforeEach(async (to, from, next) => {
   // start progress bar
-
   // determine whether the user has logged in
   const hasToken = getToken()
 
@@ -33,7 +32,7 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    if (to.path === '/profile' || to.path === '/editor') {
+    if (to.path === '/profile' || to.path === '/editor' || to.path === '/settings') {
       Message.error('请先登录！')
       next('/login')
     }

@@ -24,7 +24,7 @@
           </el-form-item>
         </el-form>
         <el-button type="primary" class="btn-submit">更新设置</el-button>
-        <el-button type="danger" plain class="btn-logout">退出登录</el-button>
+        <el-button type="danger" plain class="btn-logout" @click="handleLogout">退出登录</el-button>
       </div>
 
     </div>
@@ -52,6 +52,13 @@ export default {
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ]
       }
+    }
+  },
+  methods: {
+    handleLogout () {
+      this.$store.dispatch('user/logout')
+      this.$message.success('退出成功！')
+      this.$router.push('/')
     }
   }
 }

@@ -4,7 +4,7 @@
       <div class="col-md-6 col-xs-12">
         <h1 class="text-xs-center ng-binding">注册</h1>
         <p class="text-xs-center">
-          <a>已有账号？</a>
+          <router-link to="/login">已有账号？</router-link>
         </p>
         <div style="margin: 20px;"></div>
         <el-form label-position="right" label-width="80px" :model="user" ref="user" :rules="rules">
@@ -15,16 +15,17 @@
             <el-input v-model="user.email"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="user.password"></el-input>
+            <el-input type="password" v-model="user.password" @keyup.enter="handleRegister"></el-input>
           </el-form-item>
         </el-form>
-        <el-button type="primary" class="btn-submit">注册</el-button>
+        <el-button type="primary" class="btn-submit" @click="handleRegister">注册</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { register } from '@/api/user'
 export default {
   data () {
     return {
@@ -35,16 +36,28 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ],
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '长度不能小于6位', trigger: 'blur' }
         ]
       }
+    }
+  },
+  methods: {
+    handleRegister () {
+      register(this.user).then(response => {
+        if (response) {
+          this.$message.success('注册成功！')
+          this.$router.push('/login')
+        }
+      })
     }
   }
 }

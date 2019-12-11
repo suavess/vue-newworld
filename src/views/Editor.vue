@@ -3,32 +3,31 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-10 col-xs-12">
-          <h1 class="text-xs-center ng-binding">发布</h1>
+          <h1 class="text-xs-center ng-binding">发布文章</h1>
           <div style="margin: 20px;"></div>
-          <el-form label-position="right" label-width="80px" :model="article" :rules="rules" ref="article">
-            <el-form-item label="标题" prop="title">
+          <el-form label-position="right" label-width="80px" :model="article" ref="article">
+            <el-form-item label="标题">
               <el-input v-model="article.title"></el-input>
             </el-form-item>
-            <el-form-item label="简述" prop="desc">
-              <el-input v-model="article.desc"></el-input>
+            <el-form-item label="简述">
+              <el-input v-model="article.description"></el-input>
             </el-form-item>
-            <el-form-item label="内容" prop="body">
+            <el-form-item label="内容">
               <tinymce ref="editor"
-              v-model="article.body"
-              @onClick="onClick()"/>
+              v-model="article.body"/>
             </el-form-item>
-            <el-form-item label="标签" prop="tags">
-              <el-select v-model="article.tags" multiple filterable placeholder="请选择" style="width:400px">
+            <el-form-item label="标签">
+              <el-select v-model="article.tagList" multiple filterable placeholder="请选择" style="width:100%">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in tagList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-form>
-          <el-button type="primary" class="btn-submit">发布</el-button>
+          <el-button type="primary" class="btn-submit" @click="handleCreate">发布</el-button>
         </div>
       </div>
     </div>
@@ -36,6 +35,8 @@
 </template>
 
 <script>
+import { list } from '@/api/tags'
+import { create } from '@/api/article'
 import tinymce from '@/components/tinymce-editor.vue'
 export default {
   components: {
@@ -43,37 +44,35 @@ export default {
   },
   data () {
     return {
+      tagList: [],
       article: {
         title: '',
-        desc: '',
+        description: '',
         body: '',
-        tags: []
-      },
-      options: [{
-        value: '1',
-        label: 'Java'
-      }, {
-        value: '2',
-        label: 'JavaScript'
-      }, {
-        value: '3',
-        label: 'Vue'
-      }, {
-        value: '4',
-        label: 'SpringBoot'
-      }, {
-        value: '5',
-        label: 'PHP'
-      }],
-      rules: {
-
+        tagList: []
       }
     }
   },
+  created () {
+    this.getTagList()
+  },
   methods: {
-    onClick (e, editor) {
-      console.log(e)
-      console.log(editor)
+    // onClick (e, editor) {
+    //   console.log(e)
+    //   console.log(editor)
+    // },
+    getTagList () {
+      list().then(response => {
+        const { data } = response
+        this.tagList = data
+      })
+    },
+    handleCreate () {
+      create(this.article).then(response => {
+        if (response) {
+          this.$message.success('添加文章成功！')
+        }
+      })
     }
   }
 }

@@ -29,7 +29,7 @@
 import ArticleList from '@/components/home/ArticleList'
 import TagList from '@/components/home/TagList'
 export default {
-  name: 'home',
+  name: 'Home',
   data () {
     return {
       activeName: 'index'
