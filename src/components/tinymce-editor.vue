@@ -1,9 +1,10 @@
 <template>
   <div class="tinymce-editor">
-    <editor v-model="myValue"
+    <editor
+      v-model="myValue"
       :init="init"
-      @onClick="onClick">
-    </editor>
+      @onClick="onClick"
+    />
   </div>
 </template>
 <script>
@@ -41,7 +42,7 @@ export default {
       default: 'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image media table | removeformat'
     }
   },
-  data () {
+  data() {
     return {
       init: {
         language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,
@@ -65,26 +66,26 @@ export default {
       myValue: this.value
     }
   },
-  mounted () {
+  watch: {
+    value(newValue) {
+      this.myValue = newValue
+    },
+    myValue(newValue) {
+      this.$emit('input', newValue)
+    }
+  },
+  mounted() {
     tinymce.init({})
   },
   methods: {
     // 添加相关的事件，可用的事件参照文档=> https://github.com/tinymce/tinymce-vue => All available events
     // 需要什么事件可以自己增加
-    onClick (e) {
+    onClick(e) {
       this.$emit('onClick', e, tinymce)
     },
     // 可以添加一些自己的自定义事件，如清空内容
-    clear () {
+    clear() {
       this.myValue = ''
-    }
-  },
-  watch: {
-    value (newValue) {
-      this.myValue = newValue
-    },
-    myValue (newValue) {
-      this.$emit('input', newValue)
     }
   }
 }

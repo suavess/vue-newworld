@@ -10,14 +10,17 @@
       <div class="row">
         <div class="col-md-9">
           <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="收藏" name="feed" disabled></el-tab-pane>
-            <el-tab-pane label="首页" name="index"></el-tab-pane>
+            <el-tab-pane label="关注" name="feed" :disabled="!name">
+              <feed-list />
+            </el-tab-pane>
+            <el-tab-pane label="首页" name="index">
+              <article-list />
+            </el-tab-pane>
           </el-tabs>
-          <article-list></article-list>
         </div>
         <!-- Sidebar where popular tags are listed -->
         <div class="col-md-3">
-          <tag-list></tag-list>
+          <tag-list />
         </div>
         <!-- End the row & container divs -->
       </div>
@@ -27,22 +30,29 @@
 
 <script>
 import ArticleList from '@/components/home/ArticleList'
+import FeedList from '@/components/home/FeedList'
 import TagList from '@/components/home/TagList'
 export default {
   name: 'Home',
-  data () {
+  components: {
+    ArticleList,
+    TagList,
+    FeedList
+  },
+  data() {
     return {
       activeName: 'index'
     }
   },
-  methods: {
-    handleClick (tab, event) {
-      console.log(tab, event)
+  computed: {
+    name() {
+      return this.$store.getters.name
     }
   },
-  components: {
-    ArticleList,
-    TagList
+  methods: {
+    handleClick(tab) {
+      this.activeName = tab.name
+    }
   }
 }
 </script>

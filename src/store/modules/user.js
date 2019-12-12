@@ -4,7 +4,8 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 const state = {
   token: getToken(),
   name: '',
-  email: ''
+  email: '',
+  image: ''
 }
 
 const mutations = {
@@ -16,6 +17,9 @@ const mutations = {
   },
   SET_EMAIL: (state, email) => {
     state.email = email
+  },
+  SET_IMAGE: (state, image) => {
+    state.image = image
   }
 }
 
@@ -41,6 +45,7 @@ const actions = {
         const { data } = response
         commit('SET_NAME', data.username)
         commit('SET_EMAIL', data.email)
+        commit('SET_IMAGE', data.image)
         resolve()
       }).catch(error => {
         reject(error)
@@ -55,6 +60,7 @@ const actions = {
         commit('SET_TOKEN', '')
         commit('SET_NAME', '')
         commit('SET_EMAIL', '')
+        commit('SET_IMAGE', '')
         removeToken()
         resolve()
       }).catch(error => {

@@ -3,7 +3,7 @@ import store from '@/store'
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth' // get token from cookie
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   // start progress bar
   // determine whether the user has logged in
   const hasToken = getToken()

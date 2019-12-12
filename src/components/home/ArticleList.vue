@@ -1,140 +1,184 @@
 <template>
-<div>
-  <div v-if="isLoading" class="article-preview">正在加载文章...</div>
-  <div v-else>
-    <!-- <div v-if="articles.length === 0" class="article-preview">
-      目前没有文章。。。
-    </div> -->
-    <div class="article-preview">
-      <div class="article-meta">
-        <a href="#">
-          <img src="https://static.productionready.io/images/smiley-cyrus.jpg" alt="">
-        </a>
-        <div class="info">
-          <a class="author" href="">KhoaTest</a>
-          <span class="date">September 9, 2019</span>
+  <div v-loading="loading">
+    <div v-if="articleList.length === 0" style="text-align:center;color:#aaa;">暂无数据</div>
+    <div v-else>
+      <div v-for="article in articleList" :key="article.id" class="article-preview">
+        <div class="article-meta">
+          <router-link :to="`/profile/${article.author.id}`">
+            <img :src="article.author.image">
+          </router-link>
+          <div class="info">
+            <a class="author" href="">{{ article.author.username }}</a>
+            <span class="date">{{ article.updatedAt }}</span>
+          </div>
+          <el-button type="primary" class="btn-feed" icon="el-icon-star-off" size="mini" plain>{{ article.favoritesCount }}</el-button>
         </div>
-        <el-button type="primary" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
+        <router-link :to="`/article/${article.id}`" class="preview-link">
+          <h1>{{ article.title }}</h1>
+          <p>
+            {{ article.body | filterHtml }}
+          </p>
+          <span>查看更多...</span>
+          <ul class="tag-list">
+            <li v-for="tags in article.tagList" :key="tags.id">
+              {{ tags.name }}
+            </li>
+          </ul>
+        </router-link>
       </div>
-      <router-link to="/article/1" class="preview-link">
-        <h1>Troi hom nay mua nhieu</h1>
-        <p>hay rat nang</p>
-        <span>查看更多...</span>
-        <ul class="tag-list">
-        </ul>
-      </router-link>
-    </div>
-    <div class="article-preview">
-      <div class="article-meta">
-        <a href="#">
-          <img src="https://static.productionready.io/images/smiley-cyrus.jpg" alt="">
-        </a>
-        <div class="info">
-          <a class="author" href="">KhoaTest</a>
-          <span class="date">September 9, 2019</span>
-        </div>
-        <el-button type="primary" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
-      </div>
-      <a class="preview-link">
-        <h1>Troi hom nay mua nhieu</h1>
-        <p>hay rat nang</p>
-        <span>查看更多...</span>
-        <ul class="tag-list">
-        </ul>
-      </a>
-    </div>
-    <div class="article-preview">
-      <div class="article-meta">
-        <a href="#">
-          <img src="https://static.productionready.io/images/smiley-cyrus.jpg" alt="">
-        </a>
-        <div class="info">
-          <a class="author" href="">KhoaTest</a>
-          <span class="date">September 9, 2019</span>
-        </div>
-        <el-button type="primary" class="btn-feed" icon="el-icon-star-off" size="mini" plain>1</el-button>
-      </div>
-      <a class="preview-link">
-        <h1>Troi hom nay mua nhieu</h1>
-        <p>hay rat nang</p>
-        <span>查看更多...</span>
-        <ul class="tag-list">
-        </ul>
-      </a>
+      <el-pagination
+        style="margin-top:10px"
+        :hide-on-single-page="true"
+        :current-page.sync="queryParam.page"
+        :page-size="queryParam.size"
+        :total="total"
+        layout="prev, pager, next, jumper"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
-</div>
 </template>
 
 <script>
+import { list } from '@/api/article'
 export default {
-  data () {
+  props: {
+    // 标签
+    tag: {
+      type: String,
+      required: false,
+      default: null
+    },
+    // 作者
+    author: {
+      type: String,
+      required: false,
+      default: null
+    },
+    // 收藏者
+    favorited: {
+      type: String,
+      required: false,
+      default: null
+    }
+  },
+  data() {
     return {
-      isLoading: false,
-      articles: []
+      loading: true,
+      total: 0,
+      queryParam: {
+        page: 1,
+        size: 10
+      },
+      articleList: []
+    }
+  },
+  created() {
+    this.getArticleList()
+  },
+  methods: {
+    // 分页方法，页码改变时触发
+    handleCurrentChange(val) {
+      this.queryParam.page = val
+    },
+    async getArticleList() {
+      this.loading = true
+      await list(
+        Object.assign(this.queryParam, {
+          tag: this.tag,
+          author: this.author,
+          favorited: this.favorited
+        })
+      ).then(response => {
+        const { data } = response
+        this.articleList = data.rows
+        this.total = data.total
+      })
+      this.loading = false
     }
   }
 }
 </script>
 
 <style lang="less">
-.article-preview{
-  border-bottom: 1px solid rgba(0,0,0,.1);
+.article-preview {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 18px 0;
-  .article-meta{
+  .article-meta {
     margin: 0 0 10px;
     display: block;
     position: relative;
     font-weight: 300;
-    img{
+    img {
       display: inline-block;
       vertical-align: middle;
       height: 32px;
       width: 32px;
       border-radius: 30px;
     }
-    .info{
+    .info {
       margin: 0 15px 0 5px;
       display: inline-block;
       vertical-align: middle;
       line-height: 16px;
-      .author{
-        color: #409EFF;
+      .author {
+        color: #409eff;
         text-decoration: none;
         font-size: 14px;
       }
-      .date{
+      .date {
         color: #bbb;
         font-size: 12px;
         display: block;
       }
     }
-    .btn-feed{
-      float: right!important;
+    .btn-feed {
+      float: right !important;
     }
   }
-  .preview-link{
+  .preview-link {
     text-decoration: none;
     cursor: pointer;
-    h1{
+    h1 {
       color: #000000;
-      font-weight: 600!important;
-      font-size: 20px!important;
+      font-weight: 600 !important;
+      font-size: 20px !important;
       margin-bottom: 5px;
     }
-    p{
+    p {
       font-weight: 300;
       color: #999;
       margin-bottom: 15px;
       font-size: 14px;
       line-height: 15px;
     }
-    span{
+    span {
       max-width: 30%;
       font-size: 12px;
       font-weight: 300;
       color: #bbb;
       vertical-align: middle;
+    }
+    .tag-list{
+      float: right;
+      max-width: 50%;
+      vertical-align: top;
+      padding-left: 0px !important;
+      list-style: none !important;
+      li{
+        font-weight: 300;
+        font-size: 1rem !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+        border: 1px solid #ddd;
+        color: #aaa !important;
+        background: none !important;
+        float: left;
+        padding-right: 1em;
+        padding-left: 1em;
+        border-radius: 10rem;
+        margin-right: 3px;
+      }
     }
   }
 }

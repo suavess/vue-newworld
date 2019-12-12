@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
-// import router from '@/router'
+import router from '@/router'
 import { getToken } from '@/utils/auth'
 
 // create an axios instance
@@ -47,6 +47,10 @@ service.interceptors.response.use(
     const res = response.data
     if (res.code === 200) {
       return res
+    } else if (res.code === 401 || res.code === 402 || res.code === 403) {
+      Message.error(res.msg)
+      store.dispatch('user/logout')
+      router.push('/')
     } else {
       Message.error(res.msg)
     }

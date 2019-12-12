@@ -4,17 +4,19 @@
       <div class="row">
         <div class="col-md-10 col-xs-12">
           <h1 class="text-xs-center ng-binding">发布文章</h1>
-          <div style="margin: 20px;"></div>
-          <el-form label-position="right" label-width="80px" :model="article" ref="article">
+          <div style="margin: 20px;" />
+          <el-form ref="article" label-position="right" label-width="80px" :model="article">
             <el-form-item label="标题">
-              <el-input v-model="article.title"></el-input>
+              <el-input v-model="article.title" />
             </el-form-item>
             <el-form-item label="简述">
-              <el-input v-model="article.description"></el-input>
+              <el-input v-model="article.description" />
             </el-form-item>
             <el-form-item label="内容">
-              <tinymce ref="editor"
-              v-model="article.body"/>
+              <tinymce
+                ref="editor"
+                v-model="article.body"
+              />
             </el-form-item>
             <el-form-item label="标签">
               <el-select v-model="article.tagList" multiple filterable placeholder="请选择" style="width:100%">
@@ -22,8 +24,8 @@
                   v-for="item in tagList"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.id">
-                </el-option>
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-form>
@@ -42,7 +44,7 @@ export default {
   components: {
     tinymce
   },
-  data () {
+  data() {
     return {
       tagList: [],
       article: {
@@ -53,21 +55,17 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.getTagList()
   },
   methods: {
-    // onClick (e, editor) {
-    //   console.log(e)
-    //   console.log(editor)
-    // },
-    getTagList () {
+    getTagList() {
       list().then(response => {
         const { data } = response
         this.tagList = data
       })
     },
-    handleCreate () {
+    handleCreate() {
       create(this.article).then(response => {
         if (response) {
           this.$message.success('添加文章成功！')

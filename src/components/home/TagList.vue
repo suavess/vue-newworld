@@ -1,8 +1,8 @@
 <template>
-  <div class="sidebar">
+  <div v-loading="loading" class="sidebar">
     <p>热门标签</p>
     <div class="tag-list">
-      <a class="tag" v-for="tag in tagsList" :key="tag.id">{{tag.name}}</a>
+      <a v-for="tag in tagsList" :key="tag.id" class="tag">{{ tag.name }}</a>
     </div>
     <!-- <div>正在加载热门标签。。。</div>
     <div>暂时没有热门标签。。。</div> -->
@@ -12,20 +12,23 @@
 <script>
 import { list } from '@/api/tags'
 export default {
-  data () {
+  data() {
     return {
+      loading: true,
       tagsList: []
     }
   },
-  created () {
+  created() {
     this.getTags()
   },
   methods: {
-    getTags () {
-      list().then(response => {
+    async getTags() {
+      this.loading = true
+      await list().then(response => {
         const { data } = response
         this.tagsList = data
       })
+      this.loading = false
     }
   }
 }
