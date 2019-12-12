@@ -51,6 +51,9 @@ service.interceptors.response.use(
       Message.error(res.msg)
       store.dispatch('user/logout')
       router.push('/')
+    } else if (res.code === 405) {
+      Message.warning(res.msg)
+      router.push('/login')
     } else {
       Message.error(res.msg)
     }

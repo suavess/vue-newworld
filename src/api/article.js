@@ -34,3 +34,21 @@ export function findById(id) {
     method: 'get'
   })
 }
+
+// 通过id收藏某一篇文章
+export function favorite(data) {
+  return request({
+    url: '/articles/favorite',
+    method: 'post',
+    data
+  })
+}
+
+// 通过id取消收藏某一篇文章
+export function unFavorite(data) {
+  return request({
+    url: '/articles/favorite',
+    method: 'delete',
+    data
+  })
+}

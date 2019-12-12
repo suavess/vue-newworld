@@ -41,7 +41,7 @@
 
 <script>
 import { getToken } from '@/utils/auth'
-import { feedList } from '@/api/article'
+import { feedList, favorite, unFavorite } from '@/api/article'
 export default {
   data() {
     return {
@@ -72,6 +72,24 @@ export default {
         this.total = data.total
       })
       this.loading = false
+    },
+    // 收藏文章
+    handleFavorite(id) {
+      favorite({ id: id }).then(response => {
+        if (response) {
+          this.getArticleList()
+          this.$message.success('收藏成功！')
+        }
+      })
+    },
+    // 取消收藏文章
+    handleUnFavorite(id) {
+      unFavorite({ id: id }).then(response => {
+        if (response) {
+          this.getArticleList()
+          this.$message.success('取消收藏成功！')
+        }
+      })
     }
   }
 }
