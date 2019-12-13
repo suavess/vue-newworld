@@ -52,3 +52,20 @@ export function unFavorite(data) {
     data
   })
 }
+
+// 编辑某一篇文章
+export function edit(data) {
+  return request({
+    url: `/articles/${data.id}`,
+    method: 'put',
+    data
+  })
+}
+
+// 删除某一篇文章
+export function del(id) {
+  return request({
+    url: `/articles/${id}`,
+    method: 'delete'
+  })
+}

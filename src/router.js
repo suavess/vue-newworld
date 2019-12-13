@@ -38,7 +38,7 @@ export default new Router({
       component: () => import('@/views/Profile')
     },
     {
-      path: '/editor',
+      path: '/editor/:id?',
       name: 'editor',
       component: () => import('@/views/Editor')
     },

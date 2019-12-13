@@ -1,36 +1,36 @@
 <template>
-  <div style="width:65%;max-width:750px;">
-    <div v-if="!name" style="text-align:center;margin:20px;">
+  <div v-loading="loading" style="width:65%;max-width:750px;">
+    <div v-if="!loginId" style="text-align:center;margin:20px;">
       请先<router-link to="/login">登录</router-link>以发布评论！
     </div>
     <!-- 发布评论框 -->
     <el-form v-else>
       <el-form-item>
-        <el-input type="textarea" :rows="4" />
+        <el-input v-model="body" type="textarea" :rows="4" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="mini" style="float:right">发表评论</el-button>
+        <el-button type="primary" size="mini" style="float:right" @click="handleCreated">发表评论</el-button>
       </el-form-item>
     </el-form>
     <!-- 评论列表 -->
-    <el-card class="box-card" shadow="hover">
+    <el-card v-for="item in commentsList" :key="item.id" class="box-card" shadow="hover">
       <div slot="header" class="clearfix">
-        <img src="https://static.productionready.io/images/smiley-cyrus.jpg" alt="">
+        <img :src="item.author.image" alt="">
         <div class="info">
-          <a href="http://www.baidu.com">Suave</a>
-          <span>October 2, 2019</span>
+          <a href="http://www.baidu.com">{{ item.author.username }}</a>
+          <span>{{ item.createdAt }}</span>
         </div>
-        <el-button style="float: right; padding: 3px 0" type="text"><i class="el-icon-delete" /></el-button>
+        <el-button v-if="loginId && loginId===item.author.id" style="float: right; padding: 3px 0" type="text" @click="handleDelete(item.id)"><i class="el-icon-delete" /></el-button>
       </div>
-      <div v-for="o in 4" :key="o" class="text item">
-        {{ '列表内容 ' + o }}
+      <div class="text item">
+        {{ item.body }}
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
-import { list } from '@/api/comments'
+import { list, del, create } from '@/api/comments'
 export default {
   props: {
     id: {
@@ -41,22 +41,50 @@ export default {
   },
   data() {
     return {
-      commentsList: []
+      loading: true,
+      commentsList: [],
+      body: ''
     }
   },
   computed: {
-    name() {
-      return this.$store.getters.name
+    loginId() {
+      return this.$store.getters.id
     }
   },
   created() {
     this.getComments()
   },
   methods: {
-    getComments() {
-      list(this.id).then(response => {
+    async getComments() {
+      this.loading = true
+      await list(this.id).then(response => {
         const { data } = response
         this.commentsList = data
+      })
+      this.loading = false
+    },
+    handleCreated() {
+      create({ id: this.id, body: this.body }).then(response => {
+        if (response) {
+          this.body = ''
+          this.getComments()
+          this.$message.success('添加评论成功！')
+        }
+      })
+    },
+    // 删除评论，入参是评论id
+    handleDelete(id) {
+      this.$confirm('确定删除该评论吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        return del({ aid: this.id, cid: id })
+      }).then(response => {
+        if (response) {
+          this.getComments()
+          this.$message.success('删除评论成功！')
+        }
       })
     }
   }
@@ -74,6 +102,7 @@ export default {
   }
 }
 .box-card{
+  margin-bottom: 20px;
   .clearfix{
     img{
       float: left;

@@ -9,9 +9,9 @@
             <a href="http://www.baidu.com">{{ article.author.username }}</a>
             <span>{{ article.updatedAt }}</span>
           </div>
-          <div v-if="name==article.author.name">
-            <el-button type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px">编辑文章</el-button>
-            <el-button type="primary" icon="el-icon-star-on" class="btn-feed" size="mini">删除文章</el-button>
+          <div v-if="loginId===article.author.id">
+            <el-button type="info" plain size="mini" icon="el-icon-edit" style="margin-left:20px" @click="$router.push(`/editor/${article.id}`)">编辑文章</el-button>
+            <el-button type="danger" icon="el-icon-minus" class="btn-feed" size="mini" plain @click="handleDel">删除文章</el-button>
           </div>
           <div v-else>
             <el-button v-if="article.author.following" type="info" size="mini" icon="el-icon-minus" style="margin-left:20px" @click="handleUnFollow(article.author.id)">取关{{ article.author.username }}</el-button>
@@ -39,9 +39,9 @@
           <a href="http://www.baidu.com">{{ article.author.username }}</a>
           <span>{{ article.updatedAt }}</span>
         </div>
-        <div v-if="name==article.author.name">
-          <el-button type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px">编辑文章</el-button>
-          <el-button type="primary" icon="el-icon-star-on" class="btn-feed" size="mini">删除文章</el-button>
+        <div v-if="loginId==article.author.id" style="display:flex;">
+          <el-button type="info" plain size="mini" icon="el-icon-edit" style="margin-left:20px" @click="$router.push(`/editor/${article.id}`)">编辑文章</el-button>
+          <el-button type="danger" icon="el-icon-minus" class="btn-feed" size="mini" @click="handleDel">删除文章</el-button>
         </div>
         <div v-else style="display:flex;">
           <el-button v-if="article.author.following" type="info" size="mini" icon="el-icon-minus" style="margin-left:20px" @click="handleUnFollow(article.author.id)">取关{{ article.author.username }}</el-button>
@@ -57,7 +57,7 @@
 
 <script>
 import { follow, unFollow } from '@/api/profile'
-import { findById, favorite, unFavorite } from '@/api/article'
+import { findById, favorite, unFavorite, del } from '@/api/article'
 import comment from '@/components/comment.vue'
 export default {
   components: {
@@ -72,8 +72,8 @@ export default {
     }
   },
   computed: {
-    name() {
-      return this.$store.getters.name
+    loginId() {
+      return this.$store.getters.id
     }
   },
   created() {
@@ -120,6 +120,20 @@ export default {
         if (response) {
           this.getArticle()
           this.$message.success('取消关注该用户成功！')
+        }
+      })
+    },
+    handleDel() {
+      this.$confirm('确定删除该文章？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        return del(this.article.id)
+      }).then(response => {
+        if (response) {
+          this.$router.go(-1)
+          this.$message.success('删除文章成功！')
         }
       })
     }

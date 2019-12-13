@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div v-loading="loading" class="page">
     <div class="container page">
       <div class="row">
         <div class="col-md-10 col-xs-12">
@@ -29,7 +29,11 @@
               </el-select>
             </el-form-item>
           </el-form>
-          <el-button type="primary" class="btn-submit" @click="handleCreate">发布</el-button>
+          <div class="submit">
+            <el-button v-if="aid" @click="$router.go(-1)">取消</el-button>
+            <el-button v-if="aid" type="primary" @click="handleEdit">编辑</el-button>
+            <el-button v-else type="primary" @click="handleCreate">发布</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +42,7 @@
 
 <script>
 import { list } from '@/api/tags'
-import { create } from '@/api/article'
+import { create, findById, edit } from '@/api/article'
 import tinymce from '@/components/tinymce-editor.vue'
 export default {
   components: {
@@ -46,7 +50,9 @@ export default {
   },
   data() {
     return {
+      aid: null,
       tagList: [],
+      loading: false,
       article: {
         title: '',
         description: '',
@@ -56,13 +62,39 @@ export default {
     }
   },
   created() {
+    this.aid = this.$route.params.id
     this.getTagList()
+    if (this.aid) {
+      this.getArticleById()
+    }
   },
   methods: {
     getTagList() {
       list().then(response => {
         const { data } = response
         this.tagList = data
+      })
+    },
+    async getArticleById() {
+      this.loading = true
+      await findById(this.aid).then(response => {
+        const { data } = response
+        const tmp = []
+        data.tagList.forEach(item => {
+          tmp.push(item.id)
+        })
+        data.tagList = tmp
+        this.article = data
+      })
+      this.loading = false
+    },
+    handleEdit() {
+      edit(this.article).then(response => {
+        const { code } = response
+        if (code === 200) {
+          this.$message.success('更新文章成功！')
+          this.$router.go(-1)
+        }
       })
     },
     handleCreate() {
@@ -77,7 +109,7 @@ export default {
 </script>
 
 <style lang="less">
-.btn-submit{
+.submit{
   float: right;
 }
 </style>
