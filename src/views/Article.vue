@@ -9,8 +9,16 @@
             <a href="http://www.baidu.com">{{ article.author.username }}</a>
             <span>{{ article.updatedAt }}</span>
           </div>
-          <el-button type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px">关注Suave</el-button>
-          <el-button type="primary" plain size="mini" icon="el-icon-star-off">收藏文章(1)</el-button>
+          <div v-if="name==article.author.name">
+            <el-button type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px">编辑文章</el-button>
+            <el-button type="primary" icon="el-icon-star-on" class="btn-feed" size="mini">删除文章</el-button>
+          </div>
+          <div v-else>
+            <el-button v-if="article.author.following" type="info" size="mini" icon="el-icon-minus" style="margin-left:20px" @click="handleUnFollow(article.author.id)">取关{{ article.author.username }}</el-button>
+            <el-button v-else type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px" @click="handleFollow(article.author.id)">关注{{ article.author.username }}</el-button>
+            <el-button v-if="article.favorited" type="primary" icon="el-icon-star-on" class="btn-feed" size="mini" @click="handleUnFavorite(article.id)">取消收藏({{ article.favoritesCount }})</el-button>
+            <el-button v-else class="btn-feed" type="primary" plain icon="el-icon-star-off" size="mini" @click="handleFavorite(article.id)">收藏文章({{ article.favoritesCount }})</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -26,21 +34,30 @@
     </div>
     <div class="footer">
       <div class="comment-mate">
-        <img src="https://static.productionready.io/images/smiley-cyrus.jpg" alt="">
+        <img :src="article.author.image">
         <div class="info">
-          <a href="http://www.baidu.com">Suave</a>
-          <span>October 2, 2019</span>
+          <a href="http://www.baidu.com">{{ article.author.username }}</a>
+          <span>{{ article.updatedAt }}</span>
         </div>
-        <el-button type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px">关注Suave</el-button>
-        <el-button type="primary" plain size="mini" icon="el-icon-star-off">收藏文章(1)</el-button>
+        <div v-if="name==article.author.name">
+          <el-button type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px">编辑文章</el-button>
+          <el-button type="primary" icon="el-icon-star-on" class="btn-feed" size="mini">删除文章</el-button>
+        </div>
+        <div v-else style="display:flex;">
+          <el-button v-if="article.author.following" type="info" size="mini" icon="el-icon-minus" style="margin-left:20px" @click="handleUnFollow(article.author.id)">取关{{ article.author.username }}</el-button>
+          <el-button v-else type="info" plain size="mini" icon="el-icon-plus" style="margin-left:20px" @click="handleFollow(article.author.id)">关注{{ article.author.username }}</el-button>
+          <el-button v-if="article.favorited" type="primary" icon="el-icon-star-on" class="btn-feed" size="mini" @click="handleUnFavorite(article.id)">取消收藏({{ article.favoritesCount }})</el-button>
+          <el-button v-else class="btn-feed" type="primary" plain icon="el-icon-star-off" size="mini" @click="handleFavorite(article.id)">收藏文章({{ article.favoritesCount }})</el-button>
+        </div>
       </div>
-      <comment />
+      <comment :id="article.id" />
     </div>
   </div>
 </template>
 
 <script>
-import { findById } from '@/api/article'
+import { follow, unFollow } from '@/api/profile'
+import { findById, favorite, unFavorite } from '@/api/article'
 import comment from '@/components/comment.vue'
 export default {
   components: {
@@ -54,6 +71,11 @@ export default {
       }
     }
   },
+  computed: {
+    name() {
+      return this.$store.getters.name
+    }
+  },
   created() {
     this.id = this.$route.params.id
     this.getArticle()
@@ -63,6 +85,42 @@ export default {
       findById(this.id).then(response => {
         const { data } = response
         this.article = data
+      })
+    },
+    // 收藏文章
+    handleFavorite(id) {
+      favorite({ id: id }).then(response => {
+        if (response) {
+          this.getArticle()
+          this.$message.success('收藏成功！')
+        }
+      })
+    },
+    // 取消收藏文章
+    handleUnFavorite(id) {
+      unFavorite({ id: id }).then(response => {
+        if (response) {
+          this.getArticle()
+          this.$message.success('取消收藏成功！')
+        }
+      })
+    },
+    // 关注用户
+    handleFollow(id) {
+      follow({ id: id }).then(response => {
+        if (response) {
+          this.getArticle()
+          this.$message.success('关注该用户成功！')
+        }
+      })
+    },
+    // 取消关注用户
+    handleUnFollow(id) {
+      unFollow({ id: id }).then(response => {
+        if (response) {
+          this.getArticle()
+          this.$message.success('取消关注该用户成功！')
+        }
       })
     }
   }
@@ -159,7 +217,7 @@ export default {
       display: flex;
       flex-direction: column;
       margin-left: 2%;
-      width: 100px;
+      width: 120px;
       a{
         text-decoration: none;
         color: #409EFF;

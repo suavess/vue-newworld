@@ -11,7 +11,8 @@
             <a class="author" href="">{{ article.author.username }}</a>
             <span class="date">{{ article.updatedAt }}</span>
           </div>
-          <el-button type="primary" class="btn-feed" icon="el-icon-star-off" size="mini" plain>{{ article.favoritesCount }}</el-button>
+          <el-button v-if="article.favorited" type="primary" icon="el-icon-star-on" class="btn-feed" size="mini" @click="handleUnFavorite(article.id)">{{ article.favoritesCount }}</el-button>
+          <el-button v-else class="btn-feed" icon="el-icon-star-off" size="mini" @click="handleFavorite(article.id)">{{ article.favoritesCount }}</el-button>
         </div>
         <router-link :to="`/article/${article.id}`" class="preview-link">
           <h1>{{ article.title }}</h1>
