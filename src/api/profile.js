@@ -17,3 +17,12 @@ export function unFollow(data) {
     data
   })
 }
+
+// 通过id查询某个用户的信息
+export function info(data) {
+  return request({
+    url: '/profiles',
+    method: 'get',
+    params: data
+  })
+}

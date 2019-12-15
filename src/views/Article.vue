@@ -1,12 +1,14 @@
 <template>
-  <div class="page">
+  <div v-loading="loading" class="page">
     <div class="banner">
       <div class="container">
         <h1>{{ article.title }}</h1>
         <div class="article-mate">
-          <img :src="article.author.image">
+          <router-link :to="`/profile/${article.author.id}`">
+            <img :src="article.author.image">
+          </router-link>
           <div class="info">
-            <a href="http://www.baidu.com">{{ article.author.username }}</a>
+            <router-link :to="`/profile/${article.author.id}`">{{ article.author.username }}</router-link>
             <span>{{ article.updatedAt }}</span>
           </div>
           <div v-if="loginId===article.author.id">
@@ -65,6 +67,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       id: null,
       article: {
 
@@ -81,11 +84,13 @@ export default {
     this.getArticle()
   },
   methods: {
-    getArticle() {
-      findById(this.id).then(response => {
+    async getArticle() {
+      this.loading = true
+      await findById(this.id).then(response => {
         const { data } = response
         this.article = data
       })
+      this.loading = false
     },
     // 收藏文章
     handleFavorite(id) {

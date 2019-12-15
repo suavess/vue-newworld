@@ -7,10 +7,10 @@
           <router-link :to="`/profile/${article.author.id}`">
             <img :src="article.author.image">
           </router-link>
-          <div class="info">
+          <router-link class="info" :to="`/profile/${article.author.id}`" tag="div">
             <a class="author" href="">{{ article.author.username }}</a>
             <span class="date">{{ article.updatedAt }}</span>
-          </div>
+          </router-link>
           <el-button v-if="article.favorited" type="primary" icon="el-icon-star-on" class="btn-feed" size="mini" @click="handleUnFavorite(article.id)">{{ article.favoritesCount }}</el-button>
           <el-button v-else class="btn-feed" icon="el-icon-star-off" size="mini" @click="handleFavorite(article.id)">{{ article.favoritesCount }}</el-button>
         </div>
