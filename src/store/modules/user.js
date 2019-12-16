@@ -68,6 +68,7 @@ const actions = {
         commit('SET_IMAGE', '')
         commit('SET_ID', '')
         removeToken()
+        location.reload()
         resolve()
       }).catch(error => {
         reject(error)

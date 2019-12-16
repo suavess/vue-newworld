@@ -2,7 +2,7 @@
   <div v-loading="loading" class="sidebar">
     <p>热门标签</p>
     <div class="tag-list">
-      <a v-for="tag in tagsList" :key="tag.id" class="tag">{{ tag.name }}</a>
+      <div v-for="tag in tagsList" :key="tag.id" class="tag" @click="$emit('tag-get', {id:tag.id,name:tag.name})">{{ tag.name }}</div>
     </div>
     <!-- <div>正在加载热门标签。。。</div>
     <div>暂时没有热门标签。。。</div> -->

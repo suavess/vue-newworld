@@ -16,11 +16,14 @@
             <el-tab-pane label="首页" name="index">
               <article-list />
             </el-tab-pane>
+            <el-tab-pane v-if="Object.keys(tag).length !== 0" :label="'#'+tag.name" :name="tag.name">
+              <article-list :tag.sync="tag.name" />
+            </el-tab-pane>
           </el-tabs>
         </div>
         <!-- Sidebar where popular tags are listed -->
         <div class="col-md-3">
-          <tag-list />
+          <tag-list @tag-get="handleGetTag" />
         </div>
         <!-- End the row & container divs -->
       </div>
@@ -41,6 +44,7 @@ export default {
   },
   data() {
     return {
+      tag: {},
       activeName: 'index'
     }
   },
@@ -51,7 +55,14 @@ export default {
   },
   methods: {
     handleClick(tab) {
+      if (tab.name === 'index' || tab.name === 'feed') {
+        this.tag = {}
+      }
       this.activeName = tab.name
+    },
+    handleGetTag(obj) {
+      this.tag = obj
+      this.activeName = obj.name
     }
   }
 }

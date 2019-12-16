@@ -6,13 +6,13 @@
         <p class="text-xs-center">
           <router-link to="/register">需要注册？</router-link>
         </p>
-        <div style="margin: 20px;"/>
-        <el-form label-position="right" label-width="80px" :model="user" ref="user" :rules="rules">
+        <div style="margin: 20px;" />
+        <el-form ref="user" label-position="right" label-width="80px" :model="user" :rules="rules">
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model.trim="user.email"/>
+            <el-input v-model.trim="user.email" />
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input v-model.trim="user.password" type="password" @keyup.enter="handleLogin"/>
+            <el-input v-model.trim="user.password" type="password" @keyup.enter="handleLogin" />
           </el-form-item>
         </el-form>
         <el-button type="primary" class="btn-submit" @click="handleLogin">登录</el-button>

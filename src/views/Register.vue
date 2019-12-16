@@ -6,16 +6,16 @@
         <p class="text-xs-center">
           <router-link to="/login">已有账号？</router-link>
         </p>
-        <div style="margin: 20px;"></div>
-        <el-form label-position="right" label-width="80px" :model="user" ref="user" :rules="rules">
+        <div style="margin: 20px;" />
+        <el-form ref="user" label-position="right" label-width="80px" :model="user" :rules="rules">
           <el-form-item label="用户名" prop="username">
-            <el-input v-model="user.username"></el-input>
+            <el-input v-model="user.username" />
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="user.email"></el-input>
+            <el-input v-model="user.email" />
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="user.password" @keyup.enter="handleRegister"></el-input>
+            <el-input v-model="user.password" type="password" @keyup.enter="handleRegister" />
           </el-form-item>
         </el-form>
         <el-button type="primary" class="btn-submit" @click="handleRegister">注册</el-button>
@@ -27,7 +27,7 @@
 <script>
 import { register } from '@/api/user'
 export default {
-  data () {
+  data() {
     return {
       user: {
         username: '',
@@ -51,7 +51,7 @@ export default {
     }
   },
   methods: {
-    handleRegister () {
+    handleRegister() {
       register(this.user).then(response => {
         if (response) {
           this.$message.success('注册成功！')
