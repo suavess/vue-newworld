@@ -5,11 +5,8 @@
         <a>conduit</a>
         <span class="attribution ng-binding">
           © 2019.
-          An interactive learning project from
-          <a
-            href="https://thinkster.io"
-          >Thinkster</a>.
-          Code licensed under MIT.
+          Proudly powered by Suave
+          <a href="http://beian.miit.gov.cn/" target="_blank">浙ICP备18051143号-2</a>
         </span>
       </div>
     </footer>

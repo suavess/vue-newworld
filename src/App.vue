@@ -1,8 +1,8 @@
 <template>
   <div>
-    <header-layout/>
-    <router-view></router-view>
-    <footer-layout/>
+    <header-layout />
+    <router-view class="app-main" />
+    <footer-layout />
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import HeaderLayout from '@/components/layout/Header'
 import FooterLayout from '@/components/layout/Footer'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     HeaderLayout,
     FooterLayout
@@ -20,5 +20,5 @@ export default {
 </script>
 
 <style>
-@import './assets/css/main.css';
+@import "./assets/css/main.css";
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div v-loading="loading" class="page">
     <div v-if="articleList.length === 0" style="text-align:center;color:#aaa;">暂无数据</div>
     <div v-else>
       <div v-for="article in articleList" :key="article.id" class="article-preview">
@@ -98,6 +98,7 @@ export default {
     // 分页方法，页码改变时触发
     handleCurrentChange(val) {
       this.queryParam.page = val
+      this.getArticleList()
     },
     async getArticleList() {
       this.loading = true
